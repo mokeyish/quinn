@@ -369,8 +369,10 @@ fn reject_missing_client_cert() {
         .with_safe_default_kx_groups()
         .with_protocol_versions(&[&rustls::version::TLS13])
         .unwrap()
-        .with_client_cert_verifier(rustls::server::AllowAnyAuthenticatedClient::new(
-            rustls::RootCertStore::empty(),
+        .with_client_cert_verifier(Arc::new(
+            rustls::server::AllowAnyAuthenticatedClient::new(
+                rustls::RootCertStore::empty(),
+            )
         ))
         .with_single_cert(vec![rustls::Certificate(cert)], key)
         .unwrap();
